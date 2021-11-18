@@ -93,5 +93,4 @@ jobs:
     #       cd ~/app/doctors-registration
     #       npm install
     #       npx prisma migrate deploy
-    #       npx prisma generate
     #       pm2 restart gcb_backend

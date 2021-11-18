@@ -11,7 +11,9 @@
         "lint:fix": "eslint . --ext js,ts --fix",
         "format": "prettier -w '**/*.{js,ts}' '!**/coverage/**'",
         "type-check": "tsc --pretty --noEmit",
-        "test": "jest"
+        "test": "chmod +x ./bin/test.sh && ./bin/test.sh",
+        "test:unit": "jest roots __tests__/unit/",
+        "test:integration": "chmod +x ./bin/test.sh && ./bin/test.sh integration"
     },
     "repository": {
         "type": "git",
@@ -41,6 +43,7 @@
         "@types/supertest": "^2.0.11",
         "@typescript-eslint/eslint-plugin": "^5.3.1",
         "@typescript-eslint/parser": "^5.3.1",
+        "dotenv-cli": "^4.1.0",
         "eslint": "^8.2.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-config-prettier": "^8.3.0",
