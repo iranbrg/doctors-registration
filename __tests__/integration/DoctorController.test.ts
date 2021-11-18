@@ -3,7 +3,7 @@ import app from "../../src/app";
 import db from "../../src/database";
 import DoctorDTO from "../../src/dto/DoctorDTO";
 import { Http, Specialty } from "../../src/utils/constants";
-import generateRandomProps from "../utils/generateRanndomProps";
+import generateRandomProps from "../utils/generateRandomProps";
 
 describe("DoctorController", () => {
     beforeAll(async () => {
@@ -23,25 +23,27 @@ describe("DoctorController", () => {
             const doctorProps: DoctorDTO = {
                 name: "John Doe",
                 ...generateRandomProps(),
+                zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
 
             };
-            const res = await request(app)
+            const response = await request(app)
                 .post("/v1/doctors")
                 .send(doctorProps)
 
-            const { doctor } = res.body.data;
+            const { doctor } = response.body.data;
 
-            expect(res.status).toEqual(Http.Created);
-            expect(res.body).toHaveProperty("status", "success");
+            expect(response.status).toEqual(Http.Created);
+            expect(response.body).toHaveProperty("status", "success");
             expect(doctor).toMatchObject(doctorProps);
         });
 
-        test("Shouldn't create a new doctor whith a CRM already registered", async () => {
+        test("Shouldn't create a new doctor with a CRM already registered", async () => {
             const doctorProps1: DoctorDTO = {
                 name: "John Doe",
                 ...generateRandomProps(),
                 crm: "123456",
+                zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
 
@@ -49,6 +51,7 @@ describe("DoctorController", () => {
                 name: "Jane Doe",
                 ...generateRandomProps(),
                 crm: "123456",
+                zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
 
@@ -56,24 +59,25 @@ describe("DoctorController", () => {
                 .post("/v1/doctors")
                 .send(doctorProps1)
 
-            const res = await request(app)
+            const response = await request(app)
                 .post("/v1/doctors")
                 .send(doctorProps2)
 
-            expect(res.status).toEqual(Http.BadRequest);
-            expect(res.body).toHaveProperty("status", "error");
-            expect(res.body).toHaveProperty(
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
                 "message",
                 "CRM already registered"
             );
         });
     });
 
-    test("Shouldn't create a new doctor whith a phone number already registered", async () => {
+    test("Shouldn't create a new doctor with a phone number already registered", async () => {
         const doctorProps1: DoctorDTO = {
             name: "John Doe",
             ...generateRandomProps(),
             phoneNumber: "123456",
+            zipCode: "04576020",
             specialties: [Specialty.Allergology, Specialty.Angiology]
         };
 
@@ -88,15 +92,35 @@ describe("DoctorController", () => {
             .post("/v1/doctors")
             .send(doctorProps1)
 
-        const res = await request(app)
+        const response = await request(app)
             .post("/v1/doctors")
             .send(doctorProps2)
 
-        expect(res.status).toEqual(Http.BadRequest);
-        expect(res.body).toHaveProperty("status", "error");
-        expect(res.body).toHaveProperty(
+        expect(response.status).toEqual(Http.BadRequest);
+        expect(response.body).toHaveProperty("status", "error");
+        expect(response.body).toHaveProperty(
             "message",
             "Phone number already registered"
+        );
+    });
+
+    test("Shouldn't create a new doctor with a invalid ZIP Code provided", async () => {
+        const doctorProps: DoctorDTO = {
+            name: "Jane Doe",
+            ...generateRandomProps(),
+            phoneNumber: "123456",
+            specialties: [Specialty.Allergology, Specialty.Angiology]
+        };
+
+        const response = await request(app)
+            .post("/v1/doctors")
+            .send(doctorProps)
+
+        expect(response.status).toEqual(Http.BadRequest);
+        expect(response.body).toHaveProperty("status", "error");
+        expect(response.body).toHaveProperty(
+            "message",
+            "Invalid ZIP Code provided"
         );
     });
 });

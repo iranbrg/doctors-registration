@@ -1,3 +1,4 @@
+import axios from "axios";
 import { inject, injectable } from "tsyringe";
 import DoctorDTO from "../dto/DoctorDTO";
 import IDoctor from "../models/Doctor/IDoctor";
@@ -18,7 +19,7 @@ export default class CreateDoctorService {
         phoneNumber,
         zipCode,
         specialties
-    }: DoctorDTO): Promise<IDoctor> {
+    }: DoctorDTO): Promise<IDoctor & { zipCodeInfo: { [k: string]: string } }> {
         const isCrmRegistered = !!await this.doctorRepository.findByCrm(crm);
 
         if (isCrmRegistered) {
@@ -31,6 +32,16 @@ export default class CreateDoctorService {
             throw new ApiError("Phone number already registered");
         }
 
+        let response: any;
+
+        try {
+            response = await axios.get(`https://viacep.com.br/ws/${zipCode}/json/`);
+        } catch (err) {
+            throw new ApiError("Invalid ZIP Code provided");
+        }
+
+        const zipCodeInfo = response.data;
+
         const newDoctor = await this.doctorRepository.create(
             name,
             crm,
@@ -40,6 +51,6 @@ export default class CreateDoctorService {
             specialties
         );
 
-        return newDoctor;
+        return { ...newDoctor, zipCodeInfo };
     }
 }

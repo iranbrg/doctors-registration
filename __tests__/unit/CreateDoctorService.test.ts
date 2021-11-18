@@ -4,7 +4,10 @@ import IDoctorRepository from "../../src/repositories/DoctorRepository/IDoctorRe
 import CreateDoctorService from "../../src/services/CreateDoctorService";
 import { Specialty } from "../../src/utils/constants";
 import { ApiError } from "../../src/utils/errors";
-import generateRandomProps from "../utils/generateRanndomProps";
+import generateRandomProps from "../utils/generateRandomProps";
+import axios from 'axios';
+
+jest.mock('axios');
 
 describe("CreateDoctorService", () => {
     let doctorRepository: IDoctorRepository;
@@ -15,6 +18,8 @@ describe("CreateDoctorService", () => {
         createDoctorService = new CreateDoctorService(doctorRepository);
     });
 
+    (axios as jest.Mocked<typeof axios>).get.mockImplementation(() => Promise.resolve({ data: { foo: "foo" } }));
+
     test("Should create a new doctor", async () => {
         const doctorProps: DoctorDTO = {
             name: "John Doe",
@@ -24,6 +29,7 @@ describe("CreateDoctorService", () => {
 
         const doctor = await createDoctorService.execute(doctorProps);
 
+        expect(axios.get).toHaveBeenCalled();
         expect(doctor).toHaveProperty("id");
         expect(doctor).toMatchObject(doctorProps);
     });
@@ -36,7 +42,6 @@ describe("CreateDoctorService", () => {
         };
 
         await createDoctorService.execute(doctorProps);
-
         await expect(
             createDoctorService.execute(doctorProps)
         ).rejects.toEqual(new ApiError("CRM already registered"));
@@ -62,5 +67,20 @@ describe("CreateDoctorService", () => {
         await expect(
             createDoctorService.execute(doctorProps2)
         ).rejects.toEqual(new ApiError("Phone number already registered"));
+    });
+
+    test("Shouldn't create a new doctor with a invalid ZIP Code provided", async () => {
+        (axios as jest.Mocked<typeof axios>).get.mockImplementation(() => Promise.reject(new ApiError("Invalid ZIP Code provided")));
+
+        const doctorProps: DoctorDTO = {
+            name: "John Doe",
+            ...generateRandomProps(),
+            phoneNumber: "123456",
+            specialties: [Specialty.Allergology, Specialty.Angiology]
+        };
+
+        await expect(
+            createDoctorService.execute(doctorProps)
+        ).rejects.toEqual(new ApiError("Invalid ZIP Code provided"));
     });
 });
