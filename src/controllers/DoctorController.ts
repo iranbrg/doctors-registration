@@ -6,19 +6,11 @@ import IController from "./IController";
 
 @injectable()
 export default class DoctorController implements IController {
-    public constructor(
-        private createDoctorService: CreateDoctorService
-    ) { }
+    public constructor(private createDoctorService: CreateDoctorService) {}
 
     public async create(req: Request, res: Response): Promise<void> {
-        const {
-            name,
-            crm,
-            landline,
-            phoneNumber,
-            zipCode,
-            specialties
-        } = req.body;
+        const { name, crm, landline, phoneNumber, zipCode, specialties } =
+            req.body;
 
         const doctor = await this.createDoctorService.execute({
             name,

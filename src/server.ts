@@ -10,5 +10,7 @@ const PORT = process.env.PORT || 3000;
         console.error((err as Error).stack);
     }
 
-    app.listen(PORT, () => console.log(`Server running on ${process.env.API_URL}`));
+    app.listen(PORT, () =>
+        console.log(`Server running on ${process.env.API_URL}`)
+    );
 })();

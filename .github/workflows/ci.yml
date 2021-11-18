@@ -66,9 +66,9 @@ jobs:
       if: github.ref == 'refs/heads/staging'
       run: heroku run npx prisma migrate deploy -a ${{ secrets.HEROKU_APP_NAME }}
 
-    - name: Build project
-      if: github.ref == 'refs/heads/main'
-      run: npm run build
+    # - name: Build project
+    #   if: github.ref == 'refs/heads/main'
+    #   run: npm run build
 
     # - name: Copy files to Digital Ocean server
     #   if: github.ref == 'refs/heads/main'

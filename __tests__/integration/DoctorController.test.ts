@@ -25,11 +25,10 @@ describe("DoctorController", () => {
                 ...generateRandomProps(),
                 zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
-
             };
             const response = await request(app)
                 .post("/v1/doctors")
-                .send(doctorProps)
+                .send(doctorProps);
 
             const { doctor } = response.body.data;
 
@@ -55,13 +54,11 @@ describe("DoctorController", () => {
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
 
-            await request(app)
-                .post("/v1/doctors")
-                .send(doctorProps1)
+            await request(app).post("/v1/doctors").send(doctorProps1);
 
             const response = await request(app)
                 .post("/v1/doctors")
-                .send(doctorProps2)
+                .send(doctorProps2);
 
             expect(response.status).toEqual(Http.BadRequest);
             expect(response.body).toHaveProperty("status", "error");
@@ -88,13 +85,11 @@ describe("DoctorController", () => {
             specialties: [Specialty.Allergology, Specialty.Angiology]
         };
 
-        await request(app)
-            .post("/v1/doctors")
-            .send(doctorProps1)
+        await request(app).post("/v1/doctors").send(doctorProps1);
 
         const response = await request(app)
             .post("/v1/doctors")
-            .send(doctorProps2)
+            .send(doctorProps2);
 
         expect(response.status).toEqual(Http.BadRequest);
         expect(response.body).toHaveProperty("status", "error");
@@ -114,7 +109,7 @@ describe("DoctorController", () => {
 
         const response = await request(app)
             .post("/v1/doctors")
-            .send(doctorProps)
+            .send(doctorProps);
 
         expect(response.status).toEqual(Http.BadRequest);
         expect(response.body).toHaveProperty("status", "error");

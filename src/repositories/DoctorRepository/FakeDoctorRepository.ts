@@ -34,14 +34,14 @@ export default class FakeDoctorRepository implements IDoctorRepository {
     }
 
     public async findByCrm(crm: string): Promise<IDoctor | null> {
-        const foundDoctor = this.doctor.find(
-            user => user.crm === crm
-        );
+        const foundDoctor = this.doctor.find(user => user.crm === crm);
 
         return foundDoctor || null;
     }
 
-    public async findByPhoneNumber(phoneNumber: string): Promise<IDoctor | null> {
+    public async findByPhoneNumber(
+        phoneNumber: string
+    ): Promise<IDoctor | null> {
         const foundDoctor = this.doctor.find(
             user => user.phoneNumber === phoneNumber
         );

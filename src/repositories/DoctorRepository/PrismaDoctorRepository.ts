@@ -36,9 +36,7 @@ export default class PrismaDoctorRepository implements IDoctorRepository {
         return this.db.doctor.findMany();
     }
 
-    public async findByCrm(
-        crm: string
-    ): Promise<IDoctor | null> {
+    public async findByCrm(crm: string): Promise<IDoctor | null> {
         return this.db.doctor.findUnique({
             where: {
                 crm

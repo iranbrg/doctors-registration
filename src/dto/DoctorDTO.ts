@@ -1,5 +1,5 @@
 export default interface DoctorDTO {
-    name: string
+    name: string;
     crm: string;
     landline: string;
     phoneNumber: string;

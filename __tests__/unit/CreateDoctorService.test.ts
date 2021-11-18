@@ -1,3 +1,4 @@
+import axios from "axios";
 import DoctorDTO from "../../src/dto/DoctorDTO";
 import FakeDoctorRepository from "../../src/repositories/DoctorRepository/FakeDoctorRepository";
 import IDoctorRepository from "../../src/repositories/DoctorRepository/IDoctorRepository";
@@ -5,9 +6,8 @@ import CreateDoctorService from "../../src/services/CreateDoctorService";
 import { Specialty } from "../../src/utils/constants";
 import { ApiError } from "../../src/utils/errors";
 import generateRandomProps from "../utils/generateRandomProps";
-import axios from 'axios';
 
-jest.mock('axios');
+jest.mock("axios");
 
 describe("CreateDoctorService", () => {
     let doctorRepository: IDoctorRepository;
@@ -18,7 +18,9 @@ describe("CreateDoctorService", () => {
         createDoctorService = new CreateDoctorService(doctorRepository);
     });
 
-    (axios as jest.Mocked<typeof axios>).get.mockImplementation(() => Promise.resolve({ data: { foo: "foo" } }));
+    (axios as jest.Mocked<typeof axios>).get.mockImplementation(() =>
+        Promise.resolve({ data: { foo: "foo" } })
+    );
 
     test("Should create a new doctor", async () => {
         const doctorProps: DoctorDTO = {
@@ -42,9 +44,9 @@ describe("CreateDoctorService", () => {
         };
 
         await createDoctorService.execute(doctorProps);
-        await expect(
-            createDoctorService.execute(doctorProps)
-        ).rejects.toEqual(new ApiError("CRM already registered"));
+        await expect(createDoctorService.execute(doctorProps)).rejects.toEqual(
+            new ApiError("CRM already registered")
+        );
     });
 
     test("Shouldn't create a doctor with a phone number already registered", async () => {
@@ -64,13 +66,15 @@ describe("CreateDoctorService", () => {
 
         await createDoctorService.execute(doctorProps1);
 
-        await expect(
-            createDoctorService.execute(doctorProps2)
-        ).rejects.toEqual(new ApiError("Phone number already registered"));
+        await expect(createDoctorService.execute(doctorProps2)).rejects.toEqual(
+            new ApiError("Phone number already registered")
+        );
     });
 
     test("Shouldn't create a new doctor with a invalid ZIP Code provided", async () => {
-        (axios as jest.Mocked<typeof axios>).get.mockImplementation(() => Promise.reject(new ApiError("Invalid ZIP Code provided")));
+        (axios as jest.Mocked<typeof axios>).get.mockImplementation(() =>
+            Promise.reject(new ApiError("Invalid ZIP Code provided"))
+        );
 
         const doctorProps: DoctorDTO = {
             name: "John Doe",
@@ -79,8 +83,8 @@ describe("CreateDoctorService", () => {
             specialties: [Specialty.Allergology, Specialty.Angiology]
         };
 
-        await expect(
-            createDoctorService.execute(doctorProps)
-        ).rejects.toEqual(new ApiError("Invalid ZIP Code provided"));
+        await expect(createDoctorService.execute(doctorProps)).rejects.toEqual(
+            new ApiError("Invalid ZIP Code provided")
+        );
     });
 });

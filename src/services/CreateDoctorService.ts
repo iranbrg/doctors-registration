@@ -10,7 +10,7 @@ export default class CreateDoctorService {
     public constructor(
         @inject("DoctorRepository")
         private doctorRepository: IDoctorRepository
-    ) { }
+    ) {}
 
     public async execute({
         name,
@@ -20,13 +20,14 @@ export default class CreateDoctorService {
         zipCode,
         specialties
     }: DoctorDTO): Promise<IDoctor & { zipCodeInfo: { [k: string]: string } }> {
-        const isCrmRegistered = !!await this.doctorRepository.findByCrm(crm);
+        const isCrmRegistered = !!(await this.doctorRepository.findByCrm(crm));
 
         if (isCrmRegistered) {
             throw new ApiError("CRM already registered");
         }
 
-        const isPhoneNumberRegistered = !!await this.doctorRepository.findByPhoneNumber(phoneNumber);
+        const isPhoneNumberRegistered =
+            !!(await this.doctorRepository.findByPhoneNumber(phoneNumber));
 
         if (isPhoneNumberRegistered) {
             throw new ApiError("Phone number already registered");
@@ -35,7 +36,9 @@ export default class CreateDoctorService {
         let response: any;
 
         try {
-            response = await axios.get(`https://viacep.com.br/ws/${zipCode}/json/`);
+            response = await axios.get(
+                `https://viacep.com.br/ws/${zipCode}/json/`
+            );
         } catch (err) {
             throw new ApiError("Invalid ZIP Code provided");
         }
