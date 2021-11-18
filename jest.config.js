@@ -38,10 +38,7 @@ module.exports = {
     coverageProvider: "v8",
 
     // A list of reporter names that Jest uses when writing coverage reports
-    coverageReporters: [
-        "text",
-        "lcov"
-    ],
+    coverageReporters: ["text", "lcov"],
 
     // An object that configures minimum threshold enforcement for coverage results
     // coverageThreshold: undefined,
@@ -127,7 +124,7 @@ module.exports = {
     // runner: "jest-runner",
 
     // The paths to modules that run some code to configure or set up the testing environment before each test
-    // setupFiles: [],
+    setupFiles: ["./jest.setup.ts"],
 
     // A list of paths to modules that run some code to configure or set up the testing framework before each test
     // setupFilesAfterEnv: [],
@@ -148,7 +145,7 @@ module.exports = {
     // testLocationInResults: false,
 
     // The glob patterns Jest uses to detect test files
-    testMatch: ["**/__tests__/**/*.test.ts"],
+    testMatch: ["**/__tests__/**/*.test.ts"]
 
     // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
     // testPathIgnorePatterns: [

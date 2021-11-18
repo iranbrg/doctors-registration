@@ -66,17 +66,9 @@ jobs:
       if: github.ref == 'refs/heads/staging'
       run: heroku run npx prisma migrate deploy -a ${{ secrets.HEROKU_APP_NAME }}
 
-    - name: Login to Docker Hub
-      if: github.ref == 'refs/heads/main'
-      run: docker login --username=${{ secrets.DOCKER_HUB_USERNAME }} --password=${{ secrets.DOCKER_HUB_PASSWORD }}
-
-    - name: Build Node.js Docker image
-      if: github.ref == 'refs/heads/main'
-      run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml build gcb_node_app
-
-    - name: Push Node.js image to Docker Hub
-      if: github.ref == 'refs/heads/main'
-      run: docker-compose -f docker-compose.yml -f docker-compose.prod.yml push gcb_node_app
+    # - name: Build project
+    #   if: github.ref == 'refs/heads/main'
+    #   run: npm run build
 
     # - name: Copy files to Digital Ocean server
     #   if: github.ref == 'refs/heads/main'
@@ -86,8 +78,8 @@ jobs:
     #     username: ${{ secrets.DO_SSH_USER }}
     #     key: ${{ secrets.DO_SSH_KEY }}
     #     port: ${{ secrets.DO_SSH_PORT }}
-    #     source: "docker-compose.yml,docker-compose.prod.yml"
-    #     target: "~/app"
+    #     source: ".,!node_modules"
+    #     target: "~/app/doctors-registration"
 
     # - name: Deploy to Digital Ocean
     #   if: github.ref == 'refs/heads/main'
@@ -98,6 +90,7 @@ jobs:
     #     key: ${{ secrets.DO_SSH_KEY }}
     #     port: ${{ secrets.DO_SSH_PORT }}
     #     script: |
-    #       cd ~/app
-    #       docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull gcb_node_app
-    #       docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps gcb_node_app
+    #       cd ~/app/doctors-registration
+    #       npm install
+    #       npx prisma migrate deploy
+    #       pm2 restart gcb_backend
