@@ -8,26 +8,15 @@ datasource db {
 }
 
 model Doctor {
-    id          String    @id @default(uuid())
+    id          String   @id @default(uuid())
     name        String
-    crm         String    @unique
-    landline    String    @unique
-    phoneNumber String    @map("phone_number") @unique
-    zipCode     String    @map("zip_code")
-    specialties Specialty
-    createdAt   DateTime  @map("created_at") @default(now())
-    updatedAt   DateTime  @map("updated_at") @updatedAt
+    crm         String   @unique
+    landline    String
+    phoneNumber String   @map("phone_number") @unique
+    zipCode     String   @map("zip_code")
+    specialties String[]
+    createdAt   DateTime @map("created_at") @default(now())
+    updatedAt   DateTime @map("updated_at") @updatedAt
 
     @@map("doctors")
-}
-
-enum Specialty {
-    Allergology
-    Angiology
-    Maxillofacial
-    ClinicalCardiology
-    ChildrensCardiology
-    HeadAndNeckSurgery
-    CardiacSurgery
-    ChestSurgery
 }
