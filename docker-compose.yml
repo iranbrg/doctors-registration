@@ -1,20 +1,12 @@
 version: "3.9"
 
 services:
-  gcb_node_app:
-    build: .
-    image: iranbrg/gcb_node_app
-    container_name: gcb_node_app
-    restart: always
-    env_file:
-      - .env
-    depends_on:
-      - gcb_postgres
-
   gcb_postgres:
     image: postgres:alpine
     container_name: gcb_postgres
     restart: always
+    ports:
+      - "${POSTGRES_PORT}:5432"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
