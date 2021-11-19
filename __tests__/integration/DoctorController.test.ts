@@ -138,14 +138,11 @@ describe("DoctorController", () => {
 
             await Promise.all(
                 doctorsToBeCreated.map(d =>
-                    request(app)
-                        .post("/v1/doctors")
-                        .send(d)
+                    request(app).post("/v1/doctors").send(d)
                 )
             );
 
-            const response = await request(app)
-                .get("/v1/doctors")
+            const response = await request(app).get("/v1/doctors");
 
             const { doctors } = response.body.data;
 
@@ -169,7 +166,9 @@ describe("DoctorController", () => {
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
 
-            const doctorResponse1 = await request(app).post("/v1/doctors").send(doctorProps1)
+            const doctorResponse1 = await request(app)
+                .post("/v1/doctors")
+                .send(doctorProps1);
 
             const { doctor } = doctorResponse1.body.data;
 
@@ -177,7 +176,10 @@ describe("DoctorController", () => {
                 name: "Mira Doe",
                 ...generateRandomProps(),
                 zipCode: "04576020",
-                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+                specialties: [
+                    Specialty.ChildrensCardiology,
+                    Specialty.CardiacSurgery
+                ]
             };
 
             const response = await request(app)
@@ -196,14 +198,17 @@ describe("DoctorController", () => {
             const updatedDoctorProps: DoctorDTO = {
                 name: "Jane Doe",
                 ...generateRandomProps(),
-                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+                specialties: [
+                    Specialty.ChildrensCardiology,
+                    Specialty.CardiacSurgery
+                ]
             };
 
             const doctorId = "6eeaee26-f3e1-45c0-b454-56f3ec10a916";
 
             const response = await request(app)
                 .put(`/v1/doctors/${doctorId}`)
-                .send(updatedDoctorProps)
+                .send(updatedDoctorProps);
 
             expect(response.status).toEqual(Http.BadRequest);
             expect(response.body).toHaveProperty("status", "error");
@@ -232,9 +237,7 @@ describe("DoctorController", () => {
 
             const [doctorResponse1, doctorResponse2] = await Promise.all(
                 doctorsToBeCreated.map(d =>
-                    request(app)
-                        .post("/v1/doctors")
-                        .send(d)
+                    request(app).post("/v1/doctors").send(d)
                 )
             );
 
@@ -245,12 +248,15 @@ describe("DoctorController", () => {
                 name: "Jane Doe",
                 ...generateRandomProps(),
                 crm: doctor1.crm,
-                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+                specialties: [
+                    Specialty.ChildrensCardiology,
+                    Specialty.CardiacSurgery
+                ]
             };
 
             const response = await request(app)
                 .put(`/v1/doctors/${doctor2.id}`)
-                .send(updatedDoctorProps)
+                .send(updatedDoctorProps);
 
             expect(response.status).toEqual(Http.BadRequest);
             expect(response.body).toHaveProperty("status", "error");
@@ -279,9 +285,7 @@ describe("DoctorController", () => {
 
             const [doctorResponse1, doctorResponse2] = await Promise.all(
                 doctorsToBeCreated.map(d =>
-                    request(app)
-                        .post("/v1/doctors")
-                        .send(d)
+                    request(app).post("/v1/doctors").send(d)
                 )
             );
 
@@ -292,12 +296,15 @@ describe("DoctorController", () => {
                 name: "Jane Doe",
                 ...generateRandomProps(),
                 phoneNumber: doctor1.phoneNumber,
-                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+                specialties: [
+                    Specialty.ChildrensCardiology,
+                    Specialty.CardiacSurgery
+                ]
             };
 
             const response = await request(app)
                 .put(`/v1/doctors/${doctor2.id}`)
-                .send(updatedDoctorProps)
+                .send(updatedDoctorProps);
 
             expect(response.status).toEqual(Http.BadRequest);
             expect(response.body).toHaveProperty("status", "error");
@@ -319,12 +326,13 @@ describe("DoctorController", () => {
 
             const doctorResponse = await request(app)
                 .post("/v1/doctors")
-                .send(doctorProps)
+                .send(doctorProps);
 
             const { doctor } = doctorResponse.body.data;
 
-            const response = await request(app)
-                .delete(`/v1/doctors/${doctor.id}`)
+            const response = await request(app).delete(
+                `/v1/doctors/${doctor.id}`
+            );
 
             const nullData = response.body.data;
 
@@ -336,8 +344,9 @@ describe("DoctorController", () => {
         test("Shouldn't delete a doctor if the provided ID doesn't match any record", async () => {
             const doctorId = "6eeaee26-f3e1-45c0-b454-56f3ec10a916";
 
-            const response = await request(app)
-                .delete(`/v1/doctors/${doctorId}`)
+            const response = await request(app).delete(
+                `/v1/doctors/${doctorId}`
+            );
 
             expect(response.status).toEqual(Http.BadRequest);
             expect(response.body).toHaveProperty("status", "error");

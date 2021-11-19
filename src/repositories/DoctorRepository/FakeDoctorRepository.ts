@@ -49,12 +49,8 @@ export default class FakeDoctorRepository implements IDoctorRepository {
         return foundDoctor || null;
     }
 
-    public async findById(
-        doctorId: string
-    ): Promise<IDoctor | null> {
-        const foundDoctor = this.doctors.find(
-            user => user.id === doctorId
-        );
+    public async findById(doctorId: string): Promise<IDoctor | null> {
+        const foundDoctor = this.doctors.find(user => user.id === doctorId);
 
         return foundDoctor || null;
     }
@@ -68,9 +64,7 @@ export default class FakeDoctorRepository implements IDoctorRepository {
         zipCode: string,
         specialties: string[]
     ): Promise<IDoctor> {
-        const foundDoctor = this.doctors.find(
-            doctor => doctor.id === doctorId
-        );
+        const foundDoctor = this.doctors.find(doctor => doctor.id === doctorId);
 
         if (!foundDoctor) throw new Error("Rocord not found");
 

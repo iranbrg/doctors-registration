@@ -7,7 +7,7 @@ export default class ListDoctorsService {
     public constructor(
         @inject("DoctorRepository")
         private doctorRepository: IDoctorRepository
-    ) { }
+    ) {}
 
     public async execute(): Promise<IDoctor[]> {
         const doctors = await this.doctorRepository.findAll();

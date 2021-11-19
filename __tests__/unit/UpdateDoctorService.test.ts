@@ -28,13 +28,16 @@ describe("UpdateDoctorService", () => {
             doctorProps.landline,
             doctorProps.phoneNumber,
             doctorProps.zipCode,
-            doctorProps.specialties,
+            doctorProps.specialties
         );
 
         const updatedDoctorProps: DoctorDTO = {
             name: "Jane Doe",
             ...generateRandomProps(),
-            specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            specialties: [
+                Specialty.ChildrensCardiology,
+                Specialty.CardiacSurgery
+            ]
         };
 
         const updatedDoctor = await updateDoctorService.execute({
@@ -50,16 +53,18 @@ describe("UpdateDoctorService", () => {
         const updatedDoctorProps: DoctorDTO = {
             name: "Jane Doe",
             ...generateRandomProps(),
-            specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            specialties: [
+                Specialty.ChildrensCardiology,
+                Specialty.CardiacSurgery
+            ]
         };
 
         await expect(
             updateDoctorService.execute({
                 doctorId: String(Math.floor(Math.random() * 100000000)),
                 ...updatedDoctorProps
-            }))
-            .rejects
-            .toEqual(new ApiError("Doctor doesn't exist"));
+            })
+        ).rejects.toEqual(new ApiError("Doctor doesn't exist"));
     });
 
     test("Shouldn't update a doctor's data if the CRM provided is already in use", async () => {
@@ -75,7 +80,7 @@ describe("UpdateDoctorService", () => {
             doctorProps1.landline,
             doctorProps1.phoneNumber,
             doctorProps1.zipCode,
-            doctorProps1.specialties,
+            doctorProps1.specialties
         );
 
         const doctorProps2: DoctorDTO = {
@@ -90,14 +95,17 @@ describe("UpdateDoctorService", () => {
             doctorProps2.landline,
             doctorProps2.phoneNumber,
             doctorProps2.zipCode,
-            doctorProps2.specialties,
+            doctorProps2.specialties
         );
 
         const updatedDoctorProps: DoctorDTO = {
             name: "Mira Doe",
             ...generateRandomProps(),
             crm: doctor1.crm,
-            specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            specialties: [
+                Specialty.ChildrensCardiology,
+                Specialty.CardiacSurgery
+            ]
         };
 
         await expect(
@@ -121,7 +129,7 @@ describe("UpdateDoctorService", () => {
             doctorProps1.landline,
             doctorProps1.phoneNumber,
             doctorProps1.zipCode,
-            doctorProps1.specialties,
+            doctorProps1.specialties
         );
 
         const doctorProps2: DoctorDTO = {
@@ -136,14 +144,17 @@ describe("UpdateDoctorService", () => {
             doctorProps2.landline,
             doctorProps2.phoneNumber,
             doctorProps2.zipCode,
-            doctorProps2.specialties,
+            doctorProps2.specialties
         );
 
         const updatedDoctorProps: DoctorDTO = {
             name: "Mira Doe",
             ...generateRandomProps(),
             phoneNumber: doctor1.phoneNumber,
-            specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            specialties: [
+                Specialty.ChildrensCardiology,
+                Specialty.CardiacSurgery
+            ]
         };
 
         await expect(

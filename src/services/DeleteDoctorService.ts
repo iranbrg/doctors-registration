@@ -7,7 +7,7 @@ export default class DeleteDoctorService {
     public constructor(
         @inject("DoctorRepository")
         private doctorRepository: IDoctorRepository
-    ) { }
+    ) {}
 
     public async execute({ doctorId }: { doctorId: string }): Promise<void> {
         const doctor = await this.doctorRepository.findById(doctorId);

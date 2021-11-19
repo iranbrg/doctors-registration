@@ -14,7 +14,7 @@ export default class DoctorController implements IController {
         private updateDoctorService: UpdateDoctorService,
         private listDoctorsService: ListDoctorsService,
         private deleteDoctorService: DeleteDoctorService
-    ) { }
+    ) {}
 
     public async create(req: Request, res: Response): Promise<void> {
         const { name, crm, landline, phoneNumber, zipCode, specialties } =
@@ -44,18 +44,11 @@ export default class DoctorController implements IController {
         });
     }
 
-
     public async update(req: Request, res: Response): Promise<void> {
         const { doctorId } = req.params;
 
-        const {
-            name,
-            crm,
-            landline,
-            phoneNumber,
-            zipCode,
-            specialties
-        } = req.body;
+        const { name, crm, landline, phoneNumber, zipCode, specialties } =
+            req.body;
 
         const doctor = await this.updateDoctorService.execute({
             doctorId,

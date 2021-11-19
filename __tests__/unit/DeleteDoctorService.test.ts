@@ -44,8 +44,8 @@ describe("DeleteDoctorService", () => {
     test("Shouldn't delete a doctor if the provided ID doesn't match any record", async () => {
         const doctorId = String(Math.floor(Math.random() * 100000000));
 
-        await expect(
-            deleteDoctorService.execute({ doctorId })
-        ).rejects.toEqual(new ApiError("Doctor doesn't exist"));
+        await expect(deleteDoctorService.execute({ doctorId })).rejects.toEqual(
+            new ApiError("Doctor doesn't exist")
+        );
     });
 });
