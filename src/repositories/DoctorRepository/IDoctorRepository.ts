@@ -22,4 +22,5 @@ export default interface IDoctorRepository {
         zipCode: string,
         specialties: string[]
     ): Promise<IDoctor>;
+    delete(doctorId: string): Promise<void>;
 }

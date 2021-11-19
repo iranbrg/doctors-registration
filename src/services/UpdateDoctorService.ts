@@ -10,7 +10,7 @@ export default class UpdateDoctorService {
     public constructor(
         @inject("DoctorRepository")
         private doctorRepository: IDoctorRepository
-    ) { }
+    ) {}
 
     public async execute({
         doctorId,
@@ -19,7 +19,7 @@ export default class UpdateDoctorService {
         landline,
         phoneNumber,
         zipCode,
-        specialties,
+        specialties
     }: DoctorDTO & { doctorId: string }): Promise<IDoctor> {
         const doctor = await this.doctorRepository.findById(doctorId);
 
@@ -45,7 +45,7 @@ export default class UpdateDoctorService {
             landline,
             phoneNumber,
             zipCode,
-            specialties,
+            specialties
         );
 
         return updatedDoctor;

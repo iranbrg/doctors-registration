@@ -44,7 +44,6 @@ export const doctorSchema = {
         .required()
 };
 
-
 export const doctorIdSchema = {
     doctorId: yup.string().uuid().required()
 };

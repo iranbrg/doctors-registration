@@ -37,7 +37,7 @@ describe("ListDoctorsService", () => {
                     d.landline,
                     d.phoneNumber,
                     d.zipCode,
-                    d.specialties,
+                    d.specialties
                 )
             )
         );

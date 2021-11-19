@@ -85,4 +85,8 @@ export default class PrismaDoctorRepository implements IDoctorRepository {
             }
         });
     }
+
+    public async delete(doctorId: string): Promise<void> {
+        await this.db.doctor.delete({ where: { id: doctorId } });
+    }
 }
