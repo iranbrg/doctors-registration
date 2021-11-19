@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe";
 import DoctorDTO from "../dto/DoctorDTO";
 import IDoctor from "../models/Doctor/IDoctor";
 import IDoctorRepository from "../repositories/DoctorRepository/IDoctorRepository";
+import { Http } from "../utils/constants";
 import { ApiError } from "../utils/errors";
 
 @injectable()
