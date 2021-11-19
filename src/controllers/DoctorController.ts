@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 import CreateDoctorService from "../services/CreateDoctorService";
-import DeleteDoctorService from "../services/DeleteDoctorservice";
+import DeleteDoctorService from "../services/DeleteDoctorService";
 import ListDoctorsService from "../services/ListDoctorsService";
 import UpdateDoctorService from "../services/UpdateDoctorService";
 import { Http } from "../utils/constants";

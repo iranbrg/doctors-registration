@@ -307,4 +307,44 @@ describe("DoctorController", () => {
             );
         });
     });
+
+    describe("DELETE /v1/doctors/:doctorId", () => {
+        test("Should delete a doctor by it's ID", async () => {
+            const doctorProps: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorResponse = await request(app)
+                .post("/v1/doctors")
+                .send(doctorProps)
+
+            const { doctor } = doctorResponse.body.data;
+
+            const response = await request(app)
+                .delete(`/v1/doctors/${doctor.id}`)
+
+            const nullData = response.body.data;
+
+            expect(response.status).toEqual(Http.Ok);
+            expect(response.body).toHaveProperty("status", "success");
+            expect(nullData).toBeNull();
+        });
+
+        test("Shouldn't delete a doctor if the provided ID doesn't match any record", async () => {
+            const doctorId = "6eeaee26-f3e1-45c0-b454-56f3ec10a916";
+
+            const response = await request(app)
+                .delete(`/v1/doctors/${doctorId}`)
+
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
+                "message",
+                "Doctor doesn't exist"
+            );
+        });
+    });
 });
