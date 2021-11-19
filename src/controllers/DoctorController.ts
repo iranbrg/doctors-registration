@@ -1,13 +1,18 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 import CreateDoctorService from "../services/CreateDoctorService";
+import ListDoctorsService from "../services/ListDoctorsService";
 import UpdateDoctorService from "../services/UpdateDoctorService";
 import { Http } from "../utils/constants";
 import IController from "./IController";
 
 @injectable()
 export default class DoctorController implements IController {
-    public constructor(private createDoctorService: CreateDoctorService, private updateDoctorService: UpdateDoctorService) { }
+    public constructor(
+        private createDoctorService: CreateDoctorService,
+        private updateDoctorService: UpdateDoctorService,
+        private listDoctorsService: ListDoctorsService
+    ) { }
 
     public async create(req: Request, res: Response): Promise<void> {
         const { name, crm, landline, phoneNumber, zipCode, specialties } =
@@ -28,14 +33,14 @@ export default class DoctorController implements IController {
         });
     }
 
-    // public async index(req: Request, res: Response): Promise<void> {
-    //     const doctors = await this.listDoctorsService.execute();
+    public async index(req: Request, res: Response): Promise<void> {
+        const doctors = await this.listDoctorsService.execute();
 
-    //     res.status(Http.Ok).json({
-    //         status: "success",
-    //         data: { doctors }
-    //     });
-    // }
+        res.status(Http.Ok).json({
+            status: "success",
+            data: { doctors }
+        });
+    }
 
 
     public async update(req: Request, res: Response): Promise<void> {
