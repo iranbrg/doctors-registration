@@ -53,4 +53,36 @@ export default class PrismaDoctorRepository implements IDoctorRepository {
             }
         });
     }
+
+    public async findById(doctorId: string): Promise<IDoctor | null> {
+        return this.db.doctor.findUnique({
+            where: {
+                id: doctorId
+            }
+        });
+    }
+
+    public async update(
+        doctorId: string,
+        name: string,
+        crm: string,
+        landline: string,
+        phoneNumber: string,
+        zipCode: string,
+        specialties: string[]
+    ): Promise<IDoctor> {
+        return this.db.doctor.update({
+            where: {
+                id: doctorId
+            },
+            data: {
+                name,
+                crm,
+                landline,
+                phoneNumber,
+                zipCode,
+                specialties
+            }
+        });
+    }
 }
