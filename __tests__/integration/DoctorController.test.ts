@@ -41,7 +41,6 @@ describe("DoctorController", () => {
             const doctorProps1: DoctorDTO = {
                 name: "John Doe",
                 ...generateRandomProps(),
-                crm: "123456",
                 zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
@@ -49,7 +48,7 @@ describe("DoctorController", () => {
             const doctorProps2: DoctorDTO = {
                 name: "Jane Doe",
                 ...generateRandomProps(),
-                crm: "123456",
+                crm: doctorProps1.crm,
                 zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
@@ -67,55 +66,203 @@ describe("DoctorController", () => {
                 "CRM already registered"
             );
         });
+
+        test("Shouldn't create a new doctor with a phone number already registered", async () => {
+            const doctorProps1: DoctorDTO = {
+                name: "John Doe",
+                ...generateRandomProps(),
+                phoneNumber: "123456",
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorProps2: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                phoneNumber: "123456",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            await request(app).post("/v1/doctors").send(doctorProps1);
+
+            const response = await request(app)
+                .post("/v1/doctors")
+                .send(doctorProps2);
+
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
+                "message",
+                "Phone number already registered"
+            );
+        });
+
+        test("Shouldn't create a new doctor with a invalid ZIP Code provided", async () => {
+            const doctorProps: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                phoneNumber: "123456",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const response = await request(app)
+                .post("/v1/doctors")
+                .send(doctorProps);
+
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
+                "message",
+                "Invalid ZIP Code provided"
+            );
+        });
     });
 
-    test("Shouldn't create a new doctor with a phone number already registered", async () => {
-        const doctorProps1: DoctorDTO = {
-            name: "John Doe",
-            ...generateRandomProps(),
-            phoneNumber: "123456",
-            zipCode: "04576020",
-            specialties: [Specialty.Allergology, Specialty.Angiology]
-        };
+    describe("PUT /v1/doctors/:doctorId", () => {
+        test("Should update a doctor's data", async () => {
+            const doctorProps1: DoctorDTO = {
+                name: "John Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
 
-        const doctorProps2: DoctorDTO = {
-            name: "Jane Doe",
-            ...generateRandomProps(),
-            phoneNumber: "123456",
-            specialties: [Specialty.Allergology, Specialty.Angiology]
-        };
+            const doctorResponse1 = await request(app).post("/v1/doctors").send(doctorProps1)
 
-        await request(app).post("/v1/doctors").send(doctorProps1);
+            const { doctor } = doctorResponse1.body.data;
 
-        const response = await request(app)
-            .post("/v1/doctors")
-            .send(doctorProps2);
+            const updatedDoctorProps: DoctorDTO = {
+                name: "Mira Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            };
 
-        expect(response.status).toEqual(Http.BadRequest);
-        expect(response.body).toHaveProperty("status", "error");
-        expect(response.body).toHaveProperty(
-            "message",
-            "Phone number already registered"
-        );
-    });
+            const response = await request(app)
+                .put(`/v1/doctors/${doctor.id}`)
+                .send(updatedDoctorProps);
 
-    test("Shouldn't create a new doctor with a invalid ZIP Code provided", async () => {
-        const doctorProps: DoctorDTO = {
-            name: "Jane Doe",
-            ...generateRandomProps(),
-            phoneNumber: "123456",
-            specialties: [Specialty.Allergology, Specialty.Angiology]
-        };
+            const { doctor: updatedDoctor } = response.body.data;
 
-        const response = await request(app)
-            .post("/v1/doctors")
-            .send(doctorProps);
+            expect(response.status).toEqual(Http.Ok);
+            expect(response.body).toHaveProperty("status", "success");
+            expect(updatedDoctor.id).toEqual(doctor.id);
+            expect(updatedDoctor).toMatchObject(updatedDoctorProps);
+        });
 
-        expect(response.status).toEqual(Http.BadRequest);
-        expect(response.body).toHaveProperty("status", "error");
-        expect(response.body).toHaveProperty(
-            "message",
-            "Invalid ZIP Code provided"
-        );
+        test("Shouldn't update a doctor's data if the provided ID doesn't match any record", async () => {
+            const updatedDoctorProps: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            };
+
+            const doctorId = "6eeaee26-f3e1-45c0-b454-56f3ec10a916";
+
+            const response = await request(app)
+                .put(`/v1/doctors/${doctorId}`)
+                .send(updatedDoctorProps)
+
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
+                "message",
+                "Doctor doesn't exist"
+            );
+        });
+
+        test("Shouldn't update a doctor's data if the CRM provided is already in use", async () => {
+            const doctorProps1: DoctorDTO = {
+                name: "John Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorProps2: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorsToBeCreated = [doctorProps1, doctorProps2];
+
+            const [doctorResponse1, doctorResponse2] = await Promise.all(
+                doctorsToBeCreated.map(d =>
+                    request(app)
+                        .post("/v1/doctors")
+                        .send(d)
+                )
+            );
+
+            const { doctor: doctor1 } = doctorResponse1.body.data;
+            const { doctor: doctor2 } = doctorResponse2.body.data;
+
+            const updatedDoctorProps: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                crm: doctor1.crm,
+                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            };
+
+            const response = await request(app)
+                .put(`/v1/doctors/${doctor2.id}`)
+                .send(updatedDoctorProps)
+
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
+                "message",
+                "CRM already registered"
+            );
+        });
+
+        test("Shouldn't update a doctor's data if the phone number provided is already in use", async () => {
+            const doctorProps1: DoctorDTO = {
+                name: "John Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorProps2: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorsToBeCreated = [doctorProps1, doctorProps2];
+
+            const [doctorResponse1, doctorResponse2] = await Promise.all(
+                doctorsToBeCreated.map(d =>
+                    request(app)
+                        .post("/v1/doctors")
+                        .send(d)
+                )
+            );
+
+            const { doctor: doctor1 } = doctorResponse1.body.data;
+            const { doctor: doctor2 } = doctorResponse2.body.data;
+
+            const updatedDoctorProps: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                phoneNumber: doctor1.phoneNumber,
+                specialties: [Specialty.ChildrensCardiology, Specialty.CardiacSurgery]
+            };
+
+            const response = await request(app)
+                .put(`/v1/doctors/${doctor2.id}`)
+                .send(updatedDoctorProps)
+
+            expect(response.status).toEqual(Http.BadRequest);
+            expect(response.body).toHaveProperty("status", "error");
+            expect(response.body).toHaveProperty(
+                "message",
+                "Phone number already registered"
+            );
+        });
     });
 });

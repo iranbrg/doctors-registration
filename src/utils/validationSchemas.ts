@@ -43,3 +43,8 @@ export const doctorSchema = {
         .min(2)
         .required()
 };
+
+
+export const doctorIdSchema = {
+    doctorId: yup.string().uuid().required()
+};

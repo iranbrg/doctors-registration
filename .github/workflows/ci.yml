@@ -46,7 +46,7 @@ jobs:
         POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
         POSTGRES_DB: ${{ env.POSTGRES_DB }}
         DATABASE_URL: postgresql://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@${{ env.POSTGRES_HOST }}:${{ env.POSTGRES_PORT }}/${{ env.POSTGRES_DB }}?schema=public
-      run: npm test
+      run: npm test -- --silent
 
     - name: Format
       run: npm run format
