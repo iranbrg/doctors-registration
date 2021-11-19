@@ -118,6 +118,48 @@ describe("DoctorController", () => {
         });
     });
 
+    describe("GET /v1/doctors", () => {
+        test("Should list all registered doctors", async () => {
+            const doctorProps1: DoctorDTO = {
+                name: "John Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorProps2: DoctorDTO = {
+                name: "Jane Doe",
+                ...generateRandomProps(),
+                zipCode: "04576020",
+                specialties: [Specialty.Allergology, Specialty.Angiology]
+            };
+
+            const doctorsToBeCreated = [doctorProps1, doctorProps2];
+
+            await Promise.all(
+                doctorsToBeCreated.map(d =>
+                    request(app)
+                        .post("/v1/doctors")
+                        .send(d)
+                )
+            );
+
+            const response = await request(app)
+                .get("/v1/doctors")
+
+            const { doctors } = response.body.data;
+
+            expect(response.status).toEqual(Http.Ok);
+            expect(response.body).toHaveProperty("status", "success");
+            expect(doctors).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining(doctorsToBeCreated[0]),
+                    expect.objectContaining(doctorsToBeCreated[1])
+                ])
+            );
+        });
+    });
+
     describe("PUT /v1/doctors/:doctorId", () => {
         test("Should update a doctor's data", async () => {
             const doctorProps1: DoctorDTO = {
