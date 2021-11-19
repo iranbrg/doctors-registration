@@ -11,10 +11,10 @@ router.post("/", validate(doctorSchema, "body"), async (req, res) => {
     await doctorController.create(req, res);
 });
 
-// router.get("/", async (req, res) => {
-//     const doctorController = container.resolve(DoctorController);
-//     await doctorController.index(req, res);
-// });
+router.get("/", async (req, res) => {
+    const doctorController = container.resolve(DoctorController);
+    await doctorController.index(req, res);
+});
 
 router.put("/:doctorId", validate(doctorIdSchema, "params"), validate(doctorSchema, "body"), async (req, res) => {
     const doctorController = container.resolve(DoctorController);
