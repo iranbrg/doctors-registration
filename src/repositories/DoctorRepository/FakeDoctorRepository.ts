@@ -84,4 +84,13 @@ export default class FakeDoctorRepository implements IDoctorRepository {
         return foundDoctor;
     }
 
+    public async delete(doctorId: string): Promise<void> {
+        let idx: number;
+        const doctor = this.doctors.find(c => c.id === doctorId);
+
+        if (doctor) {
+            idx = this.doctors.indexOf(doctor);
+            this.doctors.splice(idx, 1);
+        }
+    }
 }

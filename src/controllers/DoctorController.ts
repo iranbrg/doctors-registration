@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 import CreateDoctorService from "../services/CreateDoctorService";
+import DeleteDoctorService from "../services/DeleteDoctorservice";
 import ListDoctorsService from "../services/ListDoctorsService";
 import UpdateDoctorService from "../services/UpdateDoctorService";
 import { Http } from "../utils/constants";
@@ -11,7 +12,8 @@ export default class DoctorController implements IController {
     public constructor(
         private createDoctorService: CreateDoctorService,
         private updateDoctorService: UpdateDoctorService,
-        private listDoctorsService: ListDoctorsService
+        private listDoctorsService: ListDoctorsService,
+        private deleteDoctorService: DeleteDoctorService
     ) { }
 
     public async create(req: Request, res: Response): Promise<void> {
@@ -68,6 +70,17 @@ export default class DoctorController implements IController {
         res.status(Http.Ok).json({
             status: "success",
             data: { doctor }
+        });
+    }
+
+    public async delete(req: Request, res: Response): Promise<void> {
+        const { doctorId } = req.params;
+
+        await this.deleteDoctorService.execute({ doctorId });
+
+        res.status(Http.Ok).json({
+            status: "success",
+            data: null
         });
     }
 }

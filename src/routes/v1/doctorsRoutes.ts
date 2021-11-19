@@ -21,4 +21,13 @@ router.put("/:doctorId", validate(doctorIdSchema, "params"), validate(doctorSche
     await doctorController.update(req, res);
 });
 
+router.delete(
+    "/:doctorId",
+    validate(doctorIdSchema, "params"),
+    async (req, res) => {
+        const doctorController = container.resolve(DoctorController);
+        await doctorController.delete(req, res);
+    }
+);
+
 export default router;
