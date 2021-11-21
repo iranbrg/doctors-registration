@@ -15,7 +15,7 @@ export default class DoctorController implements IController {
         private updateDoctorService: UpdateDoctorService,
         private listDoctorsService: ListDoctorsService,
         private deleteDoctorService: DeleteDoctorService
-    ) {}
+    ) { }
 
     public async create(req: Request, res: Response): Promise<void> {
         const { name, crm, landline, phoneNumber, zipCode, specialties } =
