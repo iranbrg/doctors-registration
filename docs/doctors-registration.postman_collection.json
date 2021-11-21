@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "b6f59f4e-3f8f-4f1f-ba16-d1e9629bb70d",
+		"name": "doctors-registration",
+		"description": "## References and Structure of The API\n\n- Each API version works as a prefix applied to all endpoints, like: `http://localhost:3000/v1/customers`. Here, the endpoint `/customers` is prefixed with the API version `/v1`.\n- This API follows [JSend](https://github.com/omniti-labs/jsend) specification to format JSON responses.\n\n## Errors and HTTP Status Codes\n\n### Validation Failure\n\nIf a request fails any validation, expect errors in the following format:\n\n```JSON\n{\n  \"status\": \"fail\",\n  \"data\": { \"title\" : \"A title is required\" }\n}\n```\n\n### Business Logic Error\n\nIf a request fails any business logic verification, expect errors in the following format:\n\n```JSON\n{\n  \"status\": \"error\",\n  \"code\": 400,\n  \"message\": \"Email address already in use\"\n}\n```\n\n### Server Error\n\nIf an internal server error occur, expect errors in the following format:\n\n```JSON\n{\n  \"status\": \"error\",\n  \"code\": 500,\n  \"message\": \"Internal Server Error\"\n}\n```\n\n#### Other status codes\n- `401` for `Unauthorized` requests, when a request requires authentication but it isn't provided.\n- `403` for `Forbidden` requests, when a request may be valid but the user doesn't have permissions to perform the action.\n- `404` for `Not Found` requests, when a resource can't be found to fulfill the request.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "doctors",
+					"item": [
+						{
+							"name": "/doctors",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"crm\": \"1234567\",\n    \"landline\": \"12345678\",\n    \"phoneNumber\": \"12345678\",\n    \"zipCode\": \"04576020\",\n    \"specialties\": [\n        \"allergology\",\n        \"childrens cardiology\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/doctors",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"doctors"
+									]
+								},
+								"description": "Register new doctor."
+							},
+							"response": []
+						},
+						{
+							"name": "/doctors",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/doctors",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"doctors"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "John",
+											"disabled": true
+										},
+										{
+											"key": "crm",
+											"value": "1234567",
+											"disabled": true
+										},
+										{
+											"key": "landline",
+											"value": "12345678",
+											"disabled": true
+										},
+										{
+											"key": "phone-number",
+											"value": "12345678",
+											"disabled": true
+										},
+										{
+											"key": "zip-code",
+											"value": "04576020",
+											"disabled": true
+										},
+										{
+											"key": "specialties",
+											"value": "allergology",
+											"disabled": true
+										}
+									]
+								},
+								"description": "List all registered doctors."
+							},
+							"response": []
+						},
+						{
+							"name": "/doctors/:doctorId",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"John Doe\",\n    \"crm\": \"1234567\",\n    \"landline\": \"12345678\",\n    \"phoneNumber\": \"12345678\",\n    \"zipCode\": \"04576020\",\n    \"specialties\": [\n        \"maxillofacial\",\n        \"head and neck surgery\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/doctors/:doctorId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"doctors",
+										":doctorId"
+									],
+									"variable": [
+										{
+											"key": "doctorId",
+											"value": "4f12dbe9-cb44-4059-99d5-4faf297a6e08"
+										}
+									]
+								},
+								"description": "Update data from a specific doctor."
+							},
+							"response": []
+						},
+						{
+							"name": "/doctors/:doctorId",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/doctors/:doctorId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"doctors",
+										":doctorId"
+									],
+									"variable": [
+										{
+											"key": "doctorId",
+											"value": "21f9423d-6da8-43a1-b6ac-c11bc6713d37"
+										}
+									]
+								},
+								"description": "Delete a previously added doctor."
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "1st API version."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
