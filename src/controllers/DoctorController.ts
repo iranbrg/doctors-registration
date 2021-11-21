@@ -15,7 +15,7 @@ export default class DoctorController implements IController {
         private updateDoctorService: UpdateDoctorService,
         private listDoctorsService: ListDoctorsService,
         private deleteDoctorService: DeleteDoctorService
-    ) { }
+    ) {}
 
     public async create(req: Request, res: Response): Promise<void> {
         const { name, crm, landline, phoneNumber, zipCode, specialties } =
@@ -37,7 +37,14 @@ export default class DoctorController implements IController {
     }
 
     public async index(req: Request, res: Response): Promise<void> {
-        const { name, crm, landline, "phone-number": phoneNumber, "zip-code": zipCode, specialties } = req.query;
+        const {
+            name,
+            crm,
+            landline,
+            "phone-number": phoneNumber,
+            "zip-code": zipCode,
+            specialties
+        } = req.query;
 
         const doctorSearchQuery: DoctorSearchQueryDTO = {};
 
@@ -45,11 +52,15 @@ export default class DoctorController implements IController {
         if (typeof name === "string") doctorSearchQuery.name = name;
         if (typeof crm === "string") doctorSearchQuery.crm = crm;
         if (typeof landline === "string") doctorSearchQuery.landline = landline;
-        if (typeof phoneNumber === "string") doctorSearchQuery.phoneNumber = phoneNumber;
+        if (typeof phoneNumber === "string")
+            doctorSearchQuery.phoneNumber = phoneNumber;
         if (typeof zipCode === "string") doctorSearchQuery.zipCode = zipCode;
-        if (typeof specialties === "string") doctorSearchQuery.specialties = specialties.split(",");
+        if (typeof specialties === "string")
+            doctorSearchQuery.specialties = specialties.split(",");
 
-        const doctors = await this.listDoctorsService.execute(doctorSearchQuery);
+        const doctors = await this.listDoctorsService.execute(
+            doctorSearchQuery
+        );
 
         res.status(Http.Ok).json({
             status: "success",

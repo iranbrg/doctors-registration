@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 
     while (retries) {
         try {
+            /* eslint-disable-next-line no-await-in-loop */
             await db.connect();
             console.log("Succesfully connected to database");
             break;
@@ -19,7 +20,10 @@ const PORT = process.env.PORT || 3000;
             console.log(`Retries left: ${retries}`);
 
             // Wait 5 seconds until next retry
-            await new Promise((resolve, reject) => setTimeout(resolve, 5000))
+            /* eslint-disable-next-line no-await-in-loop */
+            await new Promise((resolve, reject) => {
+                setTimeout(resolve, 5000);
+            });
         }
     }
 

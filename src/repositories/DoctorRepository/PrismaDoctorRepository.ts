@@ -48,7 +48,9 @@ export default class PrismaDoctorRepository implements IDoctorRepository {
                 landline: { contains: landline },
                 phoneNumber: { contains: phoneNumber },
                 zipCode: { contains: zipCode },
-                specialties: { hasSome: specialties ?? Object.values(Specialty) }
+                specialties: {
+                    hasSome: specialties ?? Object.values(Specialty)
+                }
             }
         });
     }
