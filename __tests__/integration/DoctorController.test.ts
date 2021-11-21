@@ -26,6 +26,7 @@ describe("DoctorController", () => {
                 zipCode: "04576020",
                 specialties: [Specialty.Allergology, Specialty.Angiology]
             };
+
             const response = await request(app)
                 .post("/v1/doctors")
                 .send(doctorProps);

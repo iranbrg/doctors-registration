@@ -42,7 +42,7 @@ describe("ListDoctorsService", () => {
             )
         );
 
-        const doctors = await listDoctorsService.execute();
+        const doctors = await listDoctorsService.execute({});
 
         expect(doctors).toEqual(
             expect.arrayContaining([

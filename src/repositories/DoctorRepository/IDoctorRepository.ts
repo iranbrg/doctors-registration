@@ -12,7 +12,14 @@ export default interface IDoctorRepository {
     findByCrm(crm: string): Promise<IDoctor | null>;
     findByPhoneNumber(phoneNumber: string): Promise<IDoctor | null>;
     findById(doctorId: string): Promise<IDoctor | null>;
-    findAll(): Promise<IDoctor[]>;
+    findAll(
+        name?: string,
+        crm?: string,
+        landline?: string,
+        phoneNumber?: string,
+        zipCode?: string,
+        specialties?: string[]
+    ): Promise<IDoctor[]>;
     update(
         doctorId: string,
         name: string,

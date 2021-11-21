@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { injectable } from "tsyringe";
 import db from "../../database";
 import IDoctor from "../../models/Doctor/IDoctor";
+import { Specialty } from "../../utils/constants";
 import IDoctorRepository from "./IDoctorRepository";
 
 @injectable()
@@ -32,8 +33,26 @@ export default class PrismaDoctorRepository implements IDoctorRepository {
         });
     }
 
-    public async findAll(): Promise<IDoctor[]> {
-        return this.db.doctor.findMany();
+    public async findAll(
+        name?: string,
+        crm?: string,
+        landline?: string,
+        phoneNumber?: string,
+        zipCode?: string,
+        specialties?: string[]
+    ): Promise<IDoctor[]> {
+        return this.db.doctor.findMany({
+            where: {
+                name: { contains: name },
+                crm: { contains: crm },
+                landline: { contains: landline },
+                phoneNumber: { contains: phoneNumber },
+                zipCode: { contains: zipCode },
+                specialties: {
+                    hasSome: specialties ?? Object.values(Specialty)
+                }
+            }
+        });
     }
 
     public async findByCrm(crm: string): Promise<IDoctor | null> {
