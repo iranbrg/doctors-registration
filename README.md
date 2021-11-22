@@ -2,8 +2,8 @@
 
 ## About The Project
 
-It is a RESTful API for doctors registrations. This API supports all CRUD
-operations. This project is also meant to be the answer for gcb group's tech
+It is a RESTful API for doctors registration. This API supports all CRUD
+operations. This project is also meant to be the answer for [gcb group](https://gcbinvestimentos.com)'s tech
 interview.
 
 ## Tech Stack
@@ -13,6 +13,7 @@ interview.
 - [Express](https://expressjs.com/pt-br/)
 - [Prisma](https://www.prisma.io/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
 - [Jest](https://jestjs.io/)
 - [Docker](https://www.docker.com/)
 - [Heroku](https://www.heroku.com/)
@@ -71,6 +72,11 @@ In the `main` branch, one can use the stable version of this API whereas in the
 
 The `main` is deployed on Digital Ocean and the `staging` branch
 is deployed on Heroku. Any client can consume this API.
+
+PS: The deploy to Digital Ocean is only simulated on CI/CD pipeline with Github
+Actions. If I actually deployed this project I'd pay 5 dolars/month and I don't
+want to spend this money 😄. However the `staging` branch is in fact deployed to
+Heroku because it's free.
 
 - [Staging](https://doctors-registration.herokuapp.com)
 - [Production]()
