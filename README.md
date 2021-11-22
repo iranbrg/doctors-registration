@@ -3,7 +3,7 @@
 ## About The Project
 
 It is a RESTful API for doctors registration. This API supports all CRUD
-operations. This project is also meant to be the answer for gcb group's tech
+operations. This project is also meant to be the answer for [gcb group](https://gcbinvestimentos.com)'s tech
 interview.
 
 ## Tech Stack
@@ -13,6 +13,7 @@ interview.
 - [Express](https://expressjs.com/pt-br/)
 - [Prisma](https://www.prisma.io/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io/)
 - [Jest](https://jestjs.io/)
 - [Docker](https://www.docker.com/)
 - [Heroku](https://www.heroku.com/)
