@@ -41,7 +41,7 @@ services:
 
   gcb_redis_test:
     image: redis:alpine
-    container_name: gcb_redis
+    container_name: gcb_redis_test
     ports:
       - "${REDIS_PORT}:6379"
     environment:
